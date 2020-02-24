@@ -70,7 +70,9 @@
 #endif
 
 #include "version.h"
+#if 0
 #include "tally.h"
+#endif
 #include "slib.h"
 #include "trint.h"
 #include "dna.h"
@@ -695,7 +697,7 @@ int tally_cpytofield
 ;  }
 
 
-int read_record3
+int read_record3_tally
 (  ZFILE  ip
 ,  struct file_buffer* fb
 ,  const char* format
@@ -1091,7 +1093,7 @@ int gauge_mem_pams
    ;  unsigned truncated = 0
    ;  unsigned st = 0
 
-   ;  while (!(st = read_record3(input, &fb, format_in, &rc)))
+   ;  while (!(st = read_record3_tally(input, &fb, format_in, &rc)))
       {  sumrecsize +=  rc.bytesize
       ;  sumreadsize += rc.seq_n
       ;  if (++ntest == g_ntest)                      /* magic parameter */
@@ -1582,7 +1584,7 @@ exit(0);
             }
 
             if (readme & 1)
-            {  unsigned tallystat = read_record3(input, &fb1, g_format_in, r1)
+            {  unsigned tallystat = read_record3_tally(input, &fb1, g_format_in, r1)
             ;  if (tallystat == TALLY_DONE)
                {  active ^= 1
                ;  r1->ID = UINT_MAX       /* so that the other stream will be instructed to read */
@@ -1606,7 +1608,7 @@ exit(0);
             ;  id_prev = r1->ID
          ;  }
             if (readme & 2)
-            {  unsigned tallystat = read_record3(input2, &fb2, g_format_in, r2)
+            {  unsigned tallystat = read_record3_tally(input2, &fb2, g_format_in, r2)
             ;  if (tallystat == TALLY_DONE)
                {  active ^= 2
                ;  r2->ID = UINT_MAX       /* so that the other stream will be instructed to read */
@@ -2148,6 +2150,7 @@ exit(0);
 ;  }
 
 
+#if 0
 #ifndef BUILD_R_BINDINGS
 
 int main
@@ -2157,6 +2160,7 @@ int main
    {  return tally_main(argc, argv)
 ;  }
 
+#endif
 #endif
 
 

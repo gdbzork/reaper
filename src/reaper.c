@@ -88,7 +88,9 @@ NOTES
 #include <ctype.h>
 
 
+#if 0
 #include "reaper.h"
+#endif
 #include "version.h"
 #include "sw.h"
 #include "slib.h"
@@ -547,7 +549,7 @@ struct read_stats_global
 }  ;
 
 
-int cpytofield
+int reaper_cpytofield
 (  char* dest
 ,  char* src
 ,  int   n
@@ -775,13 +777,13 @@ int read_recordx
             case 'G':
                   while (bufp < bufz && !izblank((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->discard_n = cpytofield(rec->discard, curp, bufp -curp)
+               ;  rec->discard_n = reaper_cpytofield(rec->discard, curp, bufp -curp)
                ;  break
                ;
             case 'F':
                   while (bufp < bufz && '\t' != (unsigned char) bufp[0])
                   bufp++
-               ;  rec->discard_n = cpytofield(rec->discard, curp, bufp -curp)
+               ;  rec->discard_n = reaper_cpytofield(rec->discard, curp, bufp -curp)
                ;  break
                ;
             case 'H':
@@ -789,13 +791,13 @@ int read_recordx
                   bufp++
                ;  if (bufp == bufz)
                   goto DONE
-               ;  rec->discard_n = cpytofield(rec->discard, curp, bufp -curp)
+               ;  rec->discard_n = reaper_cpytofield(rec->discard, curp, bufp -curp)
                ;  fmtp++
                ;  bufp++
                ;  break
                ;
             case 'a':
-                  rec->annot_n = cpytofield(rec->annot, rec->discard, rec->discard_n)
+                  rec->annot_n = reaper_cpytofield(rec->annot, rec->discard, rec->discard_n)
                ;  break
                ;
             case 'A':
@@ -804,25 +806,25 @@ int read_recordx
                ;  bufp = curp
                ;  while (bufp < bufz)
                   bufp++
-               ;  rec->annot_n = cpytofield(rec->annot, curp, bufp -curp)
+               ;  rec->annot_n = reaper_cpytofield(rec->annot, curp, bufp -curp)
                ;  break
                ;
             case 'I':
                   while (bufp < bufz && !izblank((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->id_n = cpytofield(rec->id, curp, bufp -curp)
+               ;  rec->id_n = reaper_cpytofield(rec->id, curp, bufp -curp)
                ;  break
                ;
             case 'Q':
                   while (bufp < bufz && !izblank((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->q_n = cpytofield(rec->q, curp, bufp -curp)
+               ;  rec->q_n = reaper_cpytofield(rec->q, curp, bufp -curp)
                ;  break
                ;
             case 'R':
                   while (bufp < bufz && isalpha((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->seq_n = cpytofield(rec->seq, curp, bufp -curp)
+               ;  rec->seq_n = reaper_cpytofield(rec->seq, curp, bufp -curp)
                ;  validate_sequence(rec)
                ;  break
                ;
@@ -3664,6 +3666,7 @@ X_ERR_JUMP(DONE, "DON'T PANIC");
 
 
 
+#if 0
 #ifndef BUILD_R_BINDINGS
 
 int main
@@ -3677,7 +3680,6 @@ int main
 
 
 
-#if 0
 #ifdef RREAPERR
 
 

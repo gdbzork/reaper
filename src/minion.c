@@ -39,6 +39,7 @@
 #include "trint.h"
 #include "slib.h"
 #include "sw.h"
+#include "dna.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -50,6 +51,7 @@
 #include <errno.h>
 
 
+#if 0
 #if 0
 #define BASEMAP(b)   (b == 'A' ? 0 : b == 'C' ? 1 : b == 'G' ? 2 : b == 'T' ? 3 : 4)
 #else
@@ -66,6 +68,7 @@ unsigned themap[256] =
    ,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
    ,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
    };
+#endif
 
 char dna[4] = { 'A', 'C', 'G', 'T' };
 
@@ -88,6 +91,7 @@ enum
 }  ;
 
 
+#if 0
 unsigned hash_sequence
 (  char* s
 ,  unsigned length
@@ -97,6 +101,7 @@ unsigned hash_sequence
       h = 0 + ((h << 6) ^ (h << 21) ^ (h >> 13) ^ (s[i] * 71523))
    ;  return h >> 6
 ;  }
+#endif
 
 
 struct adapter_candidate
@@ -456,7 +461,6 @@ void get_top_by_out
 ;  }
 
 
-ctr g_fieldtosmall = 0;
 
 #define MAXFIELDSIZE 511
 
@@ -487,21 +491,20 @@ struct record
 #define izblank(c) ((unsigned char) (c) == ' ' || (unsigned char) (c) == '\t')
 
 
-int cpytofield
+int minion_cpytofield
 (  char* dest
 ,  char* src
 ,  int   n
 )
    {  if (n > MAXFIELDSIZE)
          n = MAXFIELDSIZE
-      ,  g_fieldtosmall++
    ;  memcpy(dest, src, n)
    ;  dest[n] = '\0'
    ;  return n
 ;  }
 
 
-int read_record3
+int read_record3_minion
 (  ZFILE  ip
 ,  struct file_buffer* fb
 ,  const char* format
@@ -565,7 +568,7 @@ int read_record3
                bufp++
             ;  if (bufp == bufz)
                goto DONE
-            ;  rec->discard_n = cpytofield(rec->discard, curp, bufp -curp)
+            ;  rec->discard_n = minion_cpytofield(rec->discard, curp, bufp -curp)
             ;  fmtp++
             ;  bufp++
             ;  break
@@ -619,20 +622,20 @@ int read_record3
             case 'Q':
                   while (bufp < bufz && !izblank((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->q_n = cpytofield(rec->q, curp, bufp - curp)
+               ;  rec->q_n = minion_cpytofield(rec->q, curp, bufp - curp)
                ;  break
                ;
             case 'I':
                   while (bufp < bufz && !izblank((unsigned char) bufp[0]))
                   bufp++
-               ;  rec->id_n = cpytofield(rec->id, curp, bufp - curp)
+               ;  rec->id_n = minion_cpytofield(rec->id, curp, bufp - curp)
                ;  break
                ;
             case 'R':
                   while (bufp < bufz && isalpha((unsigned char) bufp[0]))
                      bufp[0] = toupper((unsigned char) bufp[0])
                   ,  bufp++
-               ;  rec->seq_n = cpytofield(rec->seq, curp, bufp - curp)
+               ;  rec->seq_n = minion_cpytofield(rec->seq, curp, bufp - curp)
                ;  break
                ;
             default:
@@ -2187,7 +2190,7 @@ goto DONE;
          {  unsigned n_skipped = 0
 
          ;  if (g_format_in)
-            {  unsigned minionstat = read_record3(input, &fb1, g_format_in, &rec)
+            {  unsigned minionstat = read_record3_minion(input, &fb1, g_format_in, &rec)
 
             ;  if (rec.ID && rec.ID <= id_prev)
                X_ERR_JUMP(DONE, "i-file %s record IDs not increasing (%u follows %u)\n", g_fnin, ju rec.ID, ju id_prev)
@@ -2351,13 +2354,14 @@ goto DONE;
 ;  }
 
 
+#if 0
 int main
 (  int argc
 ,  const char* argv[]
 )
    {  return minion_main(argc, argv)
 ;  }
-
+#endif
 
 
 
